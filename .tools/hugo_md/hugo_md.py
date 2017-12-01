@@ -23,13 +23,16 @@ if __name__ == "__main__":
     relative_hugo_content_dir = hugo_config.hugo_blog_root
     if relative_hugo_content_dir == '':
         relative_hugo_content_dir = "../../hugo_blog"
-    ab_hugo_content_dir = os.path.join(cur_dir, relative_hugo_content_dir, "content")
+    ab_hugo_root_dir = os.path.join(cur_dir, relative_hugo_content_dir)
 
     dir_index_path = os.path.join(template_dir, '_index.md')
-    dir_builder = DirBuilder(ab_pure_content_dir, ab_hugo_content_dir, dir_index_path)
+    dir_builder = DirBuilder(ab_pure_content_dir, ab_hugo_root_dir, dir_index_path)
 
     md_temp_path = os.path.join(template_dir, 'single.md')
-    md_file_builder = FileBuilder(ab_pure_content_dir, ab_hugo_content_dir, md_temp_path)
+    md_file_builder = FileBuilder(
+        hugo_config.host_root_postfix, 
+        ab_pure_content_dir, ab_hugo_root_dir, md_temp_path
+    )
     
     walker = ContentWalker(ab_pure_content_dir)
     for info in walker.run():

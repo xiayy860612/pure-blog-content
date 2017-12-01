@@ -5,9 +5,9 @@ import re
 class DirBuilder:
     """
     """
-    def __init__(self, pure_content_root, hugo_content_root, dir_index_src):
+    def __init__(self, pure_content_root, hugo_root, dir_index_src):
         self.__pure_content_root = pure_content_root
-        self.__hugo_content_root = hugo_content_root
+        self.__hugo_content_root = os.path.join(hugo_root, "content")
         self.__dir_index_src = dir_index_src
 
     def build(self, relative_dir, weight):
