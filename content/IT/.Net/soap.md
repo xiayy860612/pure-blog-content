@@ -1,0 +1,21 @@
+# SOAP Protocol
+
+SOAP(Simple Object Access Protocol), 简单对象访问协议,
+是交换数据的一种协议规范, 使用在web service中交换带结构信息.
+
+目前SOAP 1.1版是业界共同的标准,属于第二代的XML协定(第一代具代表性的技术为XML-RPC以及WDDX).
+<!--more-->
+
+## Structure
+SOAP consists below:
+- Envelope
+- Header
+- Body
+- Fault
+
+
+## Reference
+- [XML Protocol Working Group](https://www.w3.org/2000/xp/Group/)
+
+---
+[SOAP Wiki]: https://zh.wikipedia.org/wiki/SOAP

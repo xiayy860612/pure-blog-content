@@ -1,0 +1,33 @@
+# C# Network Programming
+
+<!-- more -->
+
+## IP
+
+### TCP
+- 面向连接
+- 数据先放入缓冲区，然后在需要发送的时候将缓冲区的数据全部发送出去，
+并且**不保留数据消息的界线**
+
+### UDP
+- 不使用缓冲区，并且保留数据消息的界线
+- 不保证数据的传递，需要用户程序来处理丢包的问题
+
+获取本地IP信息的方法
+- ipconfig
+- 注册表
+- WMI(windows management instrumentation)
+- DNS
+
+## 无阻塞I/O方法
+- 无阻塞socket
+- 多路复用socket
+
+## DNS
+DNS使用分层数据库的方法建立多个信息层,这些信息可以分开存储在internet的不同系统中.
+
+分层数据库按**树**的结构进行组织.
+
+DNS数据库是一个文本文件, 由RR(resource records)组成.
+
+C#提供**Dns类**来查询.

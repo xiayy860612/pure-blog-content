@@ -1,0 +1,14 @@
+# Spring 快速入门
+
+## Servlet的配置
+
+通过继承**WebMvcConfigurerAdapter**来实现对Servlet的配置
+
+- 可通过addInterceptors对interceptor进行配置, interceptor继承自HandlerInterceptorAdapter
+- 可通过addArgumentResolvers来添加参数解析器, 参数解析器继承自HandlerMethodArgumentResolver
+
+
+
+---
+
+[spring-restful-authorization]: https://github.com/ScienJus/spring-restful-authorization

@@ -1,0 +1,33 @@
+# 深入理解C#
+
+<!-- more -->
+
+## Delegate
+
+## C# 1
+- 签名必须完全一致，即参数列表(参数类型，数量)以及返回类型必须完全一致
+- 必须使用new进行显式初始化
+
+        class InstanceMethod
+        {
+            public void PrintString(string msg){...}
+        }
+        delegate void StringPrint(string msg); // declare delegate type
+
+        StringPrint d1; // declare
+        var ins = new InstanceMethod();
+        d1 = new StringPrint(ins.PrintString); // initialize
+        d1(); // invoke
+
+- System.Delegate, **immutable**
+    - invocation list, 一个delegate instance可以关联多个方法
+    - Combile/Remove, 创建一个新的delegate instance
+
+### Events
+Event can't be declared **field-like**(can't declare as a field).
+- [Delegates and Events](http://csharpindepth.com/Articles/Chapter2/Events.aspx)
+
+
+## 类型系统
+
+## 值类型/引用类型
