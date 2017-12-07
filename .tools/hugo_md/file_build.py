@@ -13,6 +13,9 @@ class FileBuilder:
         self.__hugo_static_root = os.path.join(hugo_root, 'static')
         self.__md_temp_src = md_temp_src
 
+        title_pattern_str = r'^#\s+(?P<title>.+)$';
+        self.__title_pattern = re.compile(title_pattern_str)
+
         img_pattern_str = r'![[](?P<img_title>.+)[]][(](?P<img_path>.+)[)]'
         self.__img_pattern = re.compile(img_pattern_str)
 
@@ -56,16 +59,36 @@ class FileBuilder:
         line = self.__img_pattern.sub(hugo_img_line, line)
         return line
         
-    def __process_special_words(self, line):
-        return line
+    def __get_title_from_line(self, line):
+        m = self.__title_pattern.match(line)
+        if m is not None:
+            return m.group('title')
+        return None
+
+    def __get_hugo_md_title(self, relative_file):
+        ab_md_src = os.path.join(self.__pure_content_root, relative_file)
+        
+        with open(ab_md_src, 'r') as pure_md:
+            line = pure_md.readline()
+            title = self.__get_title_from_line(line)
+            if title:
+                return title
+        
+        return os.path.basename(relative_file).rsplit('.', 1)[0].capitalize()
 
     def __get_hugo_md_content(self, relative_file):
         ab_md_src = os.path.join(self.__pure_content_root, relative_file)
         hugo_md_content = ''
         with open(ab_md_src, 'r') as pure_md:
+            is_first_line_processed = False
             for line in pure_md.readlines():
+                if not is_first_line_processed:
+                    is_first_line_processed = True
+                    title = self.__get_title_from_line(line)
+                    if title:
+                        continue
+
                 line = self.__process_img(relative_file, line)
-                line = self.__process_special_words(line)
                 hugo_md_content += line
                 
         return hugo_md_content
@@ -82,7 +105,7 @@ class FileBuilder:
         param_pattern_str = r'\${(?P<key>\w+)}'
         pattern = re.compile(param_pattern_str)
         key_processor = {
-            "title": lambda: os.path.basename(ab_md_src).rsplit('.', 1)[0].capitalize(),
+            "title": lambda: self.__get_hugo_md_title(relative_file),
             "date": lambda: time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(info.st_ctime)),
             "weight": lambda: "%s" % weight,
             "content": lambda: self.__get_hugo_md_content(relative_file)
