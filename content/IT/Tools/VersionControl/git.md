@@ -19,7 +19,7 @@
 - hotfix, 修复分支, 用于急需在短時間內修復并且無法等到下一次發佈時才修復的bug.
 从master分支checkout, 修复后merge到master和dev/release,并在master分支上打版本tag.
 
-![Git branching model]("/content-imgs/git/git-branch-model.png")
+![Git branching model](git-branch-model.png)
 
 ## Subtree/Submodule
 - [Git submodule 还是 Git Subtree](http://blog.zlxstar.me/blog/2014/07/18/git-submodule-vs-git-subtree/)
