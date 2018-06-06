@@ -1,0 +1,102 @@
+# Spring Boot --- 配置
+
+常用的配置方式, 优先级从高到低:
+
+- 命令行参数
+- 系统环境变量
+- 指定环境的profile文件, 主要application-{profile}.properties/yml
+- 通用profile文件, 主要有application.properties/yml文件
+
+## profile配置文件
+
+- application.properties/yml, 通用配置
+- application-{profile}.properties/yml
+- 自定义properties
+
+profile配置文件可以放在以下位置, 优先级从高到低:
+
+- resources/config目录
+- resources根目录
+
+详情见: [Application Property Files](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-application-property-files)
+
+通过`spring.profiles.active={profile}`来加载指定环境的profile配置文件
+
+```
+# application.properties
+
+spring.profiles.active=dev # 加载application-dev.properties
+
+```
+
+### @Value
+
+使用`@Value("${property_name}")`读取application.properties中的自定义配置
+
+```
+# application.properties
+springboot-config.name=hello
+```
+
+```
+// ValuableConfigParam
+
+@Component
+public class ValuableConfigParam {
+    @Value("${springboot-config.name}")
+    private String name;
+}
+
+```
+
+### @ConfigurationProperties
+
+通过指定前缀来自动解析配置
+
+```
+# application.properties
+springboot-config.confprop.id=1
+springboot-config.confprop.name=test
+```
+
+```
+// ConfigPropertyParams
+
+@Component
+@ConfigurationProperties(prefix = "springboot-config.confprop")
+public class ConfigPropertyParams {
+    private Integer id;
+    private String name;
+}
+```
+
+### @PropertySource
+
+读取自定义的配置
+
+```
+# custom-config.properties
+
+custom.id=1
+custom.name=hello
+
+custom.age=18
+```
+
+```
+@Configuration
+@PropertySource("classpath:custom-config.properties")
+@ConfigurationProperties(prefix = "custom")
+public class CustomConfig {
+    private Integer id;
+    private String name;
+
+    @Value("${custom.age}")
+    private Integer userAge;
+}
+```
+
+## Reference
+
+- [Externalized Configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html)
+- [Properties and Configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-properties-and-configuration.html)
