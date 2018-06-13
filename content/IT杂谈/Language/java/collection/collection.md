@@ -8,8 +8,8 @@ Java中集合类的基本接口为Collection接口.
     + ArrayList, 支持随机访问
     + LinkedList, 便于中间插入删除
 - Set
-    + HashSet, 表示不重复无序集合, 可以快速查找元素
-    + TreeSet, 有序集合
+    + HashSet, 表示不重复无序集合, 可以快速查找元素, 通过自定义元素的hashCode和equals来去重
+    + TreeSet, 有序集合, 通过自定义元素的Comparator接口来去重
 - Queue/Dequeue, 在队列头尾进行操作
 - Map, 存储键值对
     + HashMap
