@@ -1,5 +1,7 @@
 # Java 常用特性
 
+- Annotation
+- 代理
 - IO
 - NIO
 - 多线程

@@ -25,7 +25,7 @@ MySQL基础数据类型
 
 ### 特殊数据类型的处理
 
-uuid数据的处理:
+**uuid**数据的处理:
 
 1. 移除uuid中的**-**
 2. 使用unhex函数将uuid字符串转换为16字节的数字, 存储到binary(16)中
@@ -58,7 +58,9 @@ mysql> select hex(unhex('e8dc60bb6df311e889150800273063ab'));
 
 ```
 
-ip数据需要转换为数字存储:
+---
+
+**ip**数据需要转换为数字存储:
 
 1. 使用无符号整数存储ip列
 2. 使用inet_aton将ip字符串转换为整数
@@ -83,6 +85,22 @@ mysql> select inet_ntoa(3232235521);
 
 ```
 
+---
+
+**id列**的数据类型尽量选择**递增型整数**
+
+因为随机值会分布在很大的空间中, 导致insert和select变慢.
+而且随机值的插入会随机写到索引的不同位置, 导致insert语句变慢;
+由于数据分布在很大的空间中, 也就导致了select指定的数据会变慢;
+还会导致缓存失效.
+
+**由于InnoDB的索引是一个B+Tree, 所以按顺序的插入能够保证数据很快插入, 
+并保证数据集中在一定的范围之内. 递增插入是比较好的选择.**
+
+不建议使用字符串类型作为id列, 查询性能很差.
+
+一般情况下尽量使用默认值方案来替换NULL, 因为NULL会增加查询的复杂度.
+
 ## Schema的设计
 
 ### 范式与反范式
@@ -105,6 +123,7 @@ mysql> select inet_ntoa(3232235521);
 - BCNF, 基于3NF的改进范式, 消除**主属性对码的部分与传递依赖**
 
 一般情况下, 关系型数据库的表设计只要达到**3NF/BCNF**就够了.
+
 
 ```
 // 不符合1NF, 电话列可继续拆分
@@ -131,11 +150,71 @@ mysql> select inet_ntoa(3232235521);
 
 ![](./img/schema_data_type/example.jpg)
 
+针对**写密集**的场景尤其需要对schema进行范式化, 而针对读密集的场景可以使用反范式.
 
+范式化的表能够更好更快的进行更新操作, 但是查询往往需要多表join; 
+然而单独的表能够更有效的利用索引.
 
+### 缓存表 && 汇总表
 
-### id列的设计
+通过缓存表和汇总表来缓存源数据经过逻辑计算后的冗余数据, 可以提升相应业务逻辑场景的查询性能.
 
+- 非实时性数据, 定时计算更新的不严格计数
+- 实时性数据, 通过**小范围查询填满间隙**的严格计数
+
+在使用缓存表和汇总表时, 对数据的维护有两种方式:
+
+- 实时维护, 成本较高, 数据容易碎片化
+- 定期重建, 可以保持表不会有很多碎片, 而且能保证顺序组织索引, 更加高效
+
+重建表可以通过**影子表**的技巧
+
+1. 创建相同结构的新表, `create table test_table_new like test_table`
+2. 填充数据, 数据有可能时老数据, 也可能时重新整理后的数据
+3. 通过重命名来交换新表和旧表的名字, `rename table test_table to test_table_old, test_table_new to test_table`
+4. 如果出问题了, 可以很容易回滚旧表
+
+### 计数表
+
+为了提升技术表的并发处理能力, 在更新时随机到相应的slot行插入, 查询时汇总结果.
+
+```
+-- 多slot的计数表
+
+create table if not exists counter_tb (
+slot tinyint unsigned not null primary key, 
+cnt int unsigned not null
+) engine=InnoDB default charset=utf8mb4;
+
+-- 更新时随机slot更新
+insert into counter_tb (slot, cnt)
+values (rand() * 10, 1)
+on duplicate key update cnt = cnt + 1;
+
+-- 查询时汇总
+
+select * from counter_tb;
+
+select sum(cnt)
+from counter_tb;
+```
+
+### schema的修改
+
+MySQL中大部分执行alter table来修改表结构的操作都会导致重建表, 即用新的结构创建新表, 将旧表数据导入新表, 最后删除旧表.
+这对大表来说需要花费很大的时间和代价.
+
+大部分的alter table操作都会导致MySQL服务中断.
+对于在生产环境中修改表结构, 一般可采用以下方法:
+
+- 在备用数据库上修改结构后, 和主库进行切换
+- 影子拷贝, 操作同创建影子表的操作; 也可借助一些第三方工具来进行影子拷贝
+
+.frm文件存储着表的结构, 它存放在mysql的data目录下对应的schema目录里, 默认的data目录为/var/lib/mysql.
+以下情况可通过修改**.frm文件**的结构来更新表结构, 但对.frm文件的修改存在风险, 需要做好备份:
+
+- 列的默认值
+- NULL/NOT Null
 
 ## Reference
 
