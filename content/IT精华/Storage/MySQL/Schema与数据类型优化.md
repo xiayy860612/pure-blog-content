@@ -218,6 +218,7 @@ MySQL中大部分执行alter table来修改表结构的操作都会导致重建�
 
 ## Reference
 
+- [Demo](https://github.com/xiayy860612/example/tree/master/mysql_demo/schema)
 - [高性能MySQL](https://book.douban.com/subject/23008813/), 第4章 Schema与数据类型优化
 - [解释一下关系数据库的第一第二第三范式](https://www.zhihu.com/question/24696366)
 - [数据库设计三大范式与BCNF，学习笔记](https://www.cnblogs.com/ybwang/archive/2010/06/04/1751279.html)
