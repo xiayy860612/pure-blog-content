@@ -1,8 +1,8 @@
 # 阿里云负载均衡SLB
 
-![服务扩展方式](./img/expand.png)
+![服务扩展方式](../img/SLB/expand.png)
 
-![SLB](./img/SLB.png)
+![SLB](../img/SLB/SLB.png)
 
 - SLB实例
 - 监听规则
@@ -20,4 +20,4 @@ SLB提供的功能:
 - 健康检查
 - 单个实例同城灾备, 已经部署在同地域的不同可用区
 
-![SLB架构](./img/SLB-structure.png)
+![SLB架构](../img/SLB/SLB-structure.png)
