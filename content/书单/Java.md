@@ -2,23 +2,21 @@
 
 ## 初级
 
-熟练掌握Java语法和基本特性, 并熟练使用Java以及相关的工具进行业务开发
+掌握工作中Java技术栈中的**常用特性**, 能够进行快速的开发业务
 
-- [Java核心技术 卷I](https://book.douban.com/subject/26880667/), 掌握Java基础以及基本特性
+- [Java核心技术 卷I](https://book.douban.com/subject/26880667/), 掌握Java基础以及常用特性
 - [SQL必知必会](https://book.douban.com/subject/24250054/), 快速掌握sql
 
 ## 中级
 
-掌握Java的常用特性, 能够深入理解各种特性和相关工具的实现, 并对JVM有所了解
+掌握并深入理解工作中Java技术栈的绝大部分特性, 补充理论知识等软技能来加深理解, 能够攻克开发中的难点
 
 - [Java并发编程实战](https://book.douban.com/subject/10484692/), 深入理解Java的并发处理
 - [高性能MySQL](https://book.douban.com/subject/23008813/), 深入理解如何优化MySQL
 
 ## 高级
 
-能够优化Java代码, 并能能够对JVM进行调优
-
-
+通过阅读Java技术栈中的技术源码, 加深理解, 能够对技术栈的bug进行修复和对项目进行优化
 
 ## Reference
 
