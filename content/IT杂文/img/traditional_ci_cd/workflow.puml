@@ -1,0 +1,30 @@
+@startuml
+title traditional CI/CD workflow
+actor Dev
+participant "Source Repository" as SrcRepo
+participant "Continious Integration" as CI
+participant "Deploy Repository" as DeployRepo
+participant "Continious Deployment" as CD
+participant "Release Test Machine" as RTM
+participant "Release Machine" as RM
+
+==Development==
+Dev --> SrcRepo: Commit sources
+
+==CI: test & Build & Package==
+CI --> SrcRepo: pull sources
+CI --> CI: run test for sources to make sure it's correct
+CI --> CI: update build config for specific environment
+CI --> CI: make deployable package
+CI --> DeployRepo: Upload to deploy repo
+
+==CD: Deploy & Run==
+CD --> DeployRepo: pull package for specific environment in specific version
+CD --> CD: update external infrastructure config for package
+CD --> RTM: run package with infrastructure config
+CD --> RTM: run test for running package, make sure features are correct
+alt no errors
+CD --> RM: run package with infrastructure config
+end
+
+@enduml
