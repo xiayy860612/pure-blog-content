@@ -1,0 +1,10 @@
+@startuml
+
+interface Iterator<E> 
+interface ListIterator<E>
+
+class LinkedList
+
+ListIterator --|> Iterator
+
+@enduml
