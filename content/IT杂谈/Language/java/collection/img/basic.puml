@@ -16,4 +16,9 @@ interface Collection<E> {
 
 Collection --|> Iterable
 
+class AbstractCollection<E>
+
+AbstractCollection --|> Collection
+
+
 @enduml
